@@ -9,10 +9,10 @@
 
 Time and group logs for GitHub actions
 
+* [Motivation](#motivation)
 * [Usage](#usage)
   * [Inputs](#inputs)
   * [Outputs](#outputs)
-* [Motivation](#motivation)
 * [Command Line Tool](#command-line-tool)
   * [Quickstart](#quickstart)
   * [Recommended Installation](#recommended-installation)
@@ -26,16 +26,6 @@ Time and group logs for GitHub actions
 <a href="mailto:contact@fulcrumgenomics.com?subject=[GitHub inquiry]"><img src="https://img.shields.io/badge/Email_us-brightgreen.svg?&style=for-the-badge&logo=gmail&logoColor=white"/></a>
 <a href="https://www.fulcrumgenomics.com"><img src="https://img.shields.io/badge/Visit_Us-blue.svg?&style=for-the-badge&logo=wordpress&logoColor=white"/></a>
 
-## Usage
-
-<!-- start usage -->
-
-### Inputs
-
-### Outputs
-
-<!-- end usage -->
-
 ## Motivation
 
 This GitHub action and associated command-line tool enable log grouping and printing of the elapsed time
@@ -45,6 +35,69 @@ of that log group, with colored icons next to the elapsed based on the provided 
 <p>
 <img src="example.png" alt="Fulcrum Genomics" height="175"/>
 </p>
+
+
+## Usage
+
+```yaml
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: fulcrumgenomics/gha-timer@v1
+      - id: example
+        shell: bash
+        run: |
+          gha-timer start --name build
+          ... do something
+          gha-timer elapsed --name build
+```
+<!-- start usage -->
+
+### Inputs
+
+```yaml
+- uses: fulcrumgenomics/gha-timer@v1
+  with:
+    # The color of the success outcome
+    # Default: green
+    success-color: ''
+
+    # The icon to use for the success outcome
+    # Default: ✓
+    success-icon: ''
+
+    # The color of the failure outcome
+    # Default: red
+    failure-color: ''
+
+    # The icon to use for the failure outcome
+    # Default: ✕
+    failure-icon: ''
+
+    # The color of the cancelled outcome
+    # Default: yellow
+    cancelled-color: ''
+
+    # The icon to use for the cancelled outcome
+    # Default: ✕
+    cancelled-icon: ''
+
+    # The color of the skipped outcome
+    # Default: gray
+    skipped-color: ''
+
+    # The icon to use for the skipped outcome
+    # Default: ✕
+    skipped-icon: ''
+```
+
+### Outputs
+
+There are currently no outputs
+
+<!-- end usage -->
 
 ## Command Line Tool
 
