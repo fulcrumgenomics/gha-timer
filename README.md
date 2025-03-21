@@ -1,4 +1,4 @@
-# gha_timer
+# gha-timer
 
 [![PyPI Release](https://badge.fury.io/py/gha_timer.svg)](https://badge.fury.io/py/gha_timer)
 [![CI](https://github.com/fulcrumgenomics/gha-timer/actions/workflows/python_package.yml/badge.svg?branch=main)](https://github.com/fulcrumgenomics/gha-timer/actions/workflows/python_package.yml?query=branch%3Amain)
@@ -8,6 +8,14 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://docs.astral.sh/ruff/)
 
 Time and group logs for GitHub actions
+
+## Installation
+
+To install the command line tool:
+
+```console
+pip install gha-timer
+```
 
 ## Quickstart
 
