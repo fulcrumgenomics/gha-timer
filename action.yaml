@@ -1,0 +1,102 @@
+name: "setup-timer"
+author: Nils Homer (@nh13)
+description: Time and group logs for GitHub actions
+
+branding:
+  icon: "code"
+  color: "green"
+
+inputs:
+  success-color:
+    description: "The color of the success outcome"
+    required: false
+    default: "green"
+  success-icon:
+    description: "The icon to use for the success outcome"
+    default: "✓"
+  failure-color:
+    description: "The color of the failure outcome"
+    required: false
+    default: "red"
+  failure-icon:
+    description: "The icon to use for the failure outcome"
+    default: "✕"
+  cancelled-color:
+    description: "The color of the cancelled outcome"
+    required: false
+    default: "yellow"
+  cancelled-icon:
+    description: "The icon to use for the cancelled outcome"
+    default: "✕"
+  skipped-color:
+    description: "The color of the skipped outcome"
+    required: false
+    default: "gray"
+  skipped-icon:
+    description: "The icon to use for the skipped outcome"
+    default: "✕"
+
+runs:
+  using: composite
+  steps:
+    - id: print-banner
+      name: Print Banner
+      shell: bash
+      run: |
+        cat ${GITHUB_ACTION_PATH}/banner.txt
+
+    - name: Set up Python ${{ matrix.PYTHON_VERSION }}
+      id: python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        update-environment: false
+
+    - name: Install gha-timer from pypi
+      id: install-gha-timer
+      shell: bash
+      run: |
+        echo -e "::group::Installing gha-timer... 👷"
+        ${{ steps.python.outputs.python-path }} -m pip install gha-timer
+        mkdir -p "$HOME/.local/bin"
+        echo -e '#!'"${{ steps.python.outputs.python-path }}" > gha-timer;
+        echo -e "# -*- coding: utf-8 -*-" >> gha-timer
+        echo -e "import re" >> gha-timer
+        echo -e "import sys" >> gha-timer
+        echo -e "from gha_timer.main import run" >> gha-timer
+        echo -e "if __name__ == '__main__':" >> gha-timer
+        echo -e "    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])" >> gha-timer
+        echo -e "    sys.exit(run())" >> gha-timer
+        chmod 755 gha-timer
+        cat gha-timer
+        mv gha-timer "$HOME/.local/bin/gha-timer"
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        echo "::endgroup::"
+
+    - id: config 
+      name: Create config
+      shell: bash
+      run: |
+        echo -e "::group::Configuring... 🛠"
+        echo -n "" > ~/.timerrc
+        echo "success:" >> ~/.timerrc
+        echo "  color: ${{ inputs.success-color }}" >> ~/.timerrc
+        echo "  icon: ${{ inputs.success-icon }}" >> ~/.timerrc
+        echo "failure:" >> ~/.timerrc
+        echo "  color: ${{ inputs.failure-color }}" >> ~/.timerrc
+        echo "  icon: ${{ inputs.failure-icon }}" >> ~/.timerrc
+        echo "cancelled:" >> ~/.timerrc
+        echo "  color: ${{ inputs.cancelled-color }}" >> ~/.timerrc
+        echo "  icon: ${{ inputs.cancelled-icon }}" >> ~/.timerrc
+        echo "skipped:" >> ~/.timerrc
+        echo "  color: ${{ inputs.skipped-color }}" >> ~/.timerrc
+        echo "  icon: ${{ inputs.skipped-icon }}" >> ~/.timerrc
+        cat ~/.timerrc;
+        echo "::endgroup::"
+
+    - name: Finalizing
+      shell: bash
+      env:
+        YELLOW: "\033[33m"
+        RESET: "\033[0m"
+      run: echo -e "\n${YELLOW}Installation completed! ✅${RESET}"
