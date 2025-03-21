@@ -1,0 +1,218 @@
+[project]
+name            = "gha_timer"
+version         = "0.1.0"
+description     = "Time and group logs for GitHub actions"
+readme          = "README.md"
+authors         = [{ name="Nils Homer", email="nils@fulcrumgenomics.com" }]
+license         = "MIT"
+include         = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies    = [
+    "pyyaml (>=6.0.2,<7.0.0)",
+    "types-pyyaml (>=6.0.12.20241230,<7.0.0.0)"
+]
+classifiers     = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
+
+[project.urls]
+"homepage" = "https://github.com/fulcrumgenomics/gha_timer"
+"repository" = "https://github.com/fulcrumgenomics/gha_timer"
+"Bug Tracker" = "https://github.com/fulcrumgenomics/gha_timer/issues"
+
+[project.scripts]
+gha-timer = "gha_timer.main:run"
+
+[tool.poetry]
+requires-poetry = ">=2.1"
+
+[tool.poetry.requires-plugins]
+poethepoet = ">=0.29"
+
+[tool.poetry.group.dev.dependencies]
+mypy        = "^1.13.0"
+pytest      = "^8.3.3"
+pytest-cov  = "^5.0.0"
+ruff        = "0.7.4"
+
+[tool.poetry.group.ipython]
+optional = true
+
+[tool.poetry.group.ipython.dependencies]
+ipython = "^8.24.0"
+ipdb    = "^0.13.13"
+
+[build-system]
+requires      = ["poetry-core>=2.1"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poe]
+poetry_command = "task"
+
+[tool.poe.tasks]
+fix-format = "ruff format"
+fix-lint   = "ruff check --fix"
+
+fix-all.ignore_fail = "return_non_zero"
+fix-all.sequence    = [
+    "fix-format",
+    "fix-lint"
+]
+
+check-lock   = "poetry check --lock"
+check-format = "ruff format --check --diff"
+check-lint   = "ruff check"
+check-tests  = "pytest"
+check-typing = "mypy"
+
+check-all.ignore_fail = "return_non_zero"
+check-all.sequence    = [
+    "check-lock",
+    "check-format",
+    "check-lint",
+    "check-tests",
+    "check-typing",
+	"check-cli",
+]
+
+fix-and-check-all.ignore_fail = "return_non_zero"
+fix-and-check-all.sequence    = [
+    "fix-all",
+    "check-all"
+]
+
+[tool.poe.tasks.check-cli]
+default_item_type = "shell"
+sequence = [
+	"gha-timer stop",
+	"gha-timer start",
+	"gha-timer start --name build",
+	"gha-timer elapsed --outcome success --name build",
+	"gha-timer start",
+	"gha-timer stop",
+	"gha-timer start",
+	"gha-timer elapsed --outcome failure",
+	"gha-timer elapsed --outcome cancelled",
+	"gha-timer elapsed --outcome skipped",
+	"gha-timer stop",
+]
+
+[tool.mypy]
+files                       = ["./"]
+strict_optional             = true
+strict_equality             = true
+check_untyped_defs          = true
+disallow_incomplete_defs    = true
+disallow_untyped_calls      = true
+disallow_untyped_decorators = true
+disallow_untyped_defs       = true
+no_implicit_optional        = true
+warn_no_return              = true
+warn_redundant_casts        = true
+warn_return_any             = true
+warn_unreachable            = true
+warn_unused_configs         = true
+warn_unused_ignores         = true
+enable_error_code           = [
+    "ignore-without-code",
+    "possibly-undefined",
+]
+exclude                     = [
+    "docs/",
+    "site/",
+]
+
+[[tool.mypy.overrides]]
+module = "defopt"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.4"
+addopts    = [
+    "--color=yes",
+    "--import-mode=importlib",
+    "--cov"
+]
+
+[tool.ruff]
+line-length    = 100
+target-version = "py311"
+output-format  = "full"
+preview        = true
+
+[tool.ruff.lint]
+select    = [
+    "ARG",    # Unused arguments
+    "C901",   # McCabe complexity
+    "B",      # bugbear
+    "D",      # pydocstyle (docstrings. We have the "google" convention enabled)
+    "D204",   # Blank line between class docstring and first (__init__) method
+    "D213",   # Summary line should be located on the line after opening quotes
+    "E",      # pycodestyle errors
+    "LOG",    # flake8-logging
+    "LOG015", # (preview rule) Prohibit calls to the root logger
+    "F",      # pyflakes
+    "I",      # isort
+    "N",      # PEP8 naming
+    "W",      # pycodestyle warnings
+    "Q",      # flake8-quotes
+]
+ignore    = [
+    "E203",
+    "E701",
+    "D212",  # summary line should be located on the same line as opening quotes
+    "D100",  # missing docstring in public module
+    "D104",  # missing docstring in public package
+]
+unfixable = ["B"]
+# NB: only preview rules explicitly selected above (e.g. LOG015) will be enforced
+preview = true
+explicit-preview-rules = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D103"] # missing docstring in public function
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.git-cliff.changelog]
+header = ""
+trim = true
+body = """
+{% for group, commits in commits | group_by(attribute="group") %}
+    ## {{ group | upper_first }}
+    {% for commit in commits %}
+        - {{ commit.message | upper_first }} ({{ commit.id | truncate(length=8, end="") }})\
+    {% endfor %}
+{% endfor %}\n
+"""
+
+[tool.git-cliff.git]
+conventional_commits = true
+commit_parsers = [
+    { message = "^.+!:*", group = "Breaking"},
+    { message = "^feat*", group = "Features"},
+    { message = "^fix*", group = "Bug Fixes"},
+    { message = "^docs*", group = "Documentation"},
+    { message = "^perf*", group = "Performance"},
+    { message = "^refactor*", group = "Refactor"},
+    { message = "^style*", group = "Styling"},
+    { message = "^test*", group = "Testing"},
+    { message = "^chore\\(release\\):*", skip = true},
+    { message = "^chore*", group = "Miscellaneous Tasks"},
+    { body = ".*security", group = "Security"}
+]
+filter_commits = false

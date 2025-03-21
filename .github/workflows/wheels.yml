@@ -1,0 +1,29 @@
+name: build wheels
+
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build-wheels:
+    name: Build multiarch Python3 wheel
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+
+      - name: Build wheels
+        run: pip wheel --no-deps -w /tmp/wheelhouse .
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: gha_timer-wheel
+          path: /tmp/wheelhouse/gha_timer*.whl
+          if-no-files-found: error
