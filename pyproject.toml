@@ -1,6 +1,6 @@
 [project]
 name            = "gha_timer"
-version         = "0.1.1"
+version         = "1.0.0"
 description     = "Time and group logs for GitHub actions"
 readme          = "README.md"
 authors         = [{ name="Nils Homer", email="nils@fulcrumgenomics.com" }]
