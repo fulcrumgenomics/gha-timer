@@ -104,7 +104,4 @@ runs:
 
     - name: Finalizing
       shell: bash
-      env:
-        YELLOW: "\033[33m"
-        RESET: "\033[0m"
-      run: echo -e "\n${YELLOW}Installation completed\!${RESET} ✅"
+      run: echo -e "\n\033[33mInstallation completed\!\033[0m ✅"
