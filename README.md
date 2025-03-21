@@ -1,6 +1,6 @@
 # gha-timer
 
-[![PyPI Release](https://badge.fury.io/py/gha_timer.svg)](https://badge.fury.io/py/gha_timer)
+[![PyPI Release](https://badge.fury.io/py/gha-timer.svg)](https://badge.fury.io/py/gha-timer)
 [![CI](https://github.com/fulcrumgenomics/gha-timer/actions/workflows/python_package.yml/badge.svg?branch=main)](https://github.com/fulcrumgenomics/gha-timer/actions/workflows/python_package.yml?query=branch%3Amain)
 [![Python Versions](https://img.shields.io/badge/python-3.11_|_3.12_|_3.13-blue)](https://github.com/fulcrumgenomics/gha-timer)
 [![MyPy Checked](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
@@ -182,7 +182,7 @@ poetry install
 To check successful installation, run:
 
 ```console
-poetry run gha_timer hello --name Fulcrum
+gha-timer --help
 ```
 
 ### Installing into a Mamba Environment
