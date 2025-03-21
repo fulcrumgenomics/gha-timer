@@ -1,6 +1,6 @@
 {
   "name": "gha-timer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "fetch through merge base",
   "scripts": {
     "build": "tsc && node lib/generate-docs.js",
