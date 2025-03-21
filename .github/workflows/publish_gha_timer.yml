@@ -122,8 +122,15 @@ jobs:
       pull-requests: read
     needs: make-changelog
     steps:
+      - name: Checkout the Repository at the Tagged Commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+
       - name: Download the sdist
         uses: actions/download-artifact@v4
+
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v2
@@ -132,3 +139,11 @@ jobs:
           body: ${{ needs.make-changelog.outputs.release_body }}
           draft: false
           prerelease: false
+
+      - name: Update the latest tag
+        shell: bash
+        run: |
+          latest_tag=$(echo "${{ github.ref_name }}" | cut -c -2)
+          git tag -a "${{ github.ref_name }}" -m "Release version ${{ github.ref_name }}" "${latest_tag}"
+          git push origin :"${latest_tag}" || git push origin "${latest_tag}"
+          git push origin "${latest_tag}"
