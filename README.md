@@ -9,15 +9,52 @@
 
 Time and group logs for GitHub actions
 
-## Installation
+* [Usage](#usage)
+  * [Inputs](#inputs)
+  * [Outputs](#outputs)
+* [Motivation](#motivation)
+* [Command Line Tool](#command-line-tool)
+  * [Quickstart](#quickstart)
+  * [Recommended Installation](#recommended-installation)
+  * [Installing into a mamba environment](#installing-into-a-mamba-environment)
+<p>
+<a href float="left"="https://fulcrumgenomics.com"><img src=".github/logos/fulcrumgenomics.svg" alt="Fulcrum Genomics" height="100"/></a>
+</p>
 
-To install the command line tool:
+[Visit us at Fulcrum Genomics](https://www.fulcrumgenomics.com) to learn more about how we can power your Bioinformatics with fetch-through-merge-base and beyond.
+
+<a href="mailto:contact@fulcrumgenomics.com?subject=[GitHub inquiry]"><img src="https://img.shields.io/badge/Email_us-brightgreen.svg?&style=for-the-badge&logo=gmail&logoColor=white"/></a>
+<a href="https://www.fulcrumgenomics.com"><img src="https://img.shields.io/badge/Visit_Us-blue.svg?&style=for-the-badge&logo=wordpress&logoColor=white"/></a>
+
+## Usage
+
+<!-- start usage -->
+
+### Inputs
+
+### Outputs
+
+<!-- end usage -->
+
+## Motivation
+
+This GitHub action and associated command-line tool enable log grouping and printing of the elapsed time
+of that log group, with colored icons next to the elapsed based on the provided outcome (`success`, `failure`, 
+`cancelled`, or `skipped`).
+
+<p>
+<img src="example.png" alt="Fulcrum Genomics" height="175"/>
+</p>
+
+## Command Line Tool
+
+### Quickstart
+
+Install command line tool:
 
 ```console
 pip install gha-timer
 ```
-
-## Quickstart
 
 Start a timer:
 
@@ -79,9 +116,7 @@ and `bg_grey`.
 [group-log-lines-link]: https://github.com/actions/toolkit/blob/main/docs/commands.md#group-and-ungroup-log-lines
 [steps-context-link]: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#steps-context
 
-
-
-## Recommended Installation
+### Recommended Installation
 
 Install the Python package and dependency management tool [`poetry`](https://python-poetry.org/docs/#installation) using official documentation.
 You must have Python 3.11 or greater available on your system path, which could be managed by [`mamba`](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html), [`pyenv`](https://github.com/pyenv/pyenv), or another package manager. 
@@ -97,7 +132,7 @@ To check successful installation, run:
 poetry run gha_timer hello --name Fulcrum
 ```
 
-## Installing into a Mamba Environment
+### Installing into a Mamba Environment
 
 Install the Python package and dependency management tool [`poetry`](https://python-poetry.org/docs/#installation) and the environment manager [`mamba`](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) using official documentation.
 Create and activate a virtual environment with Python 3.11 or greater:
@@ -116,7 +151,9 @@ poetry install
 To check successful installation, run:
 
 ```console
-gha_timer hello --name Fulcrum
+$ gha-timer start
+$ gha-timer elapsed --outcome success
+$ gha-timer stop
 ```
 
 ## Development and Testing

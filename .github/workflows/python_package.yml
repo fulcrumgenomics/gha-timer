@@ -8,7 +8,8 @@ env:
   POETRY_VERSION: 2.1.0
 
 jobs:
-  Tests:
+  test-library:
+    name: Test the library
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,3 +49,33 @@ jobs:
 
       - name: Test the library
         run: poetry task check-all
+  test-action:
+    name: Test the action
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        PYTHON_VERSION: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the action
+        uses: ./
+
+      - name: Test the action
+        shell: bash
+        run: |
+          gha-timer start --name "A short test"
+          gha-timer elapsed --outcome success --name "A short test"
+          gha-timer start --name "A longer test"
+          sleep 1
+          gha-timer elapsed --outcome success --name "A longer test"
+          gha-timer start --name "Something that will fail"
+          sleep 1
+          gha-timer elapsed --outcome failure --name "Something that will fail"
+          gha-timer start --name "Something that gets cancelled"
+          sleep 1
+          gha-timer elapsed --outcome cancelled --name "Something that gets cancelled"
+          gha-timer start --name "Something that gets skipped"
+          sleep 1
+          gha-timer elapsed --outcome skipped --name "Something that gets skipped"
+          gha-timer stop 
