@@ -47,7 +47,7 @@ runs:
   using: composite
   steps:
     - id: print-banner
-      if: ${{ inputs.skip_banner == "true" }}
+      if: ${{ inputs.skip-banner == "true" }}
       name: Print Banner
       shell: bash
       run: |
