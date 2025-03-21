@@ -13,6 +13,7 @@ inputs:
     default: "green"
   success-icon:
     description: "The icon to use for the success outcome"
+    required: false
     default: "✓"
   failure-color:
     description: "The color of the failure outcome"
@@ -27,6 +28,7 @@ inputs:
     default: "yellow"
   cancelled-icon:
     description: "The icon to use for the cancelled outcome"
+    required: false
     default: "✕"
   skipped-color:
     description: "The color of the skipped outcome"
@@ -34,12 +36,18 @@ inputs:
     default: "gray"
   skipped-icon:
     description: "The icon to use for the skipped outcome"
+    required: false
     default: "✕"
+  skip-banner:
+    description: "Skip emitting the banner"
+    required: false
+    default: "false"
 
 runs:
   using: composite
   steps:
     - id: print-banner
+      if: ${{ inputs.skip-banner == 'false' }}
       name: Print Banner
       shell: bash
       run: |

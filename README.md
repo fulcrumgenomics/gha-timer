@@ -91,6 +91,10 @@ jobs:
     # The icon to use for the skipped outcome
     # Default: ✕
     skipped-icon: ''
+
+    # Skip emitting the banner
+    # Default: false
+    skip-banner: ''
 ```
 
 ### Outputs
