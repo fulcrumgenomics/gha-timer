@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [v1.1.1] (2026-04-20)
+
+CI:
+
+* Pin GitHub Actions to full-length commit SHAs (#12)
+
+[v1.1.1]: https://github.com/fulcrumgenomics/gha-timer/releases/tag/v1.1.1
+
 ## [v1.1.0] (2025-03-22)
 
 Features:
